@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  taxi-front:
+    container_name: taxi-front
+    restart: always
+    build: ./taxi-front
+    ports:
+      - "3000:3000"
+  
+  taxi-back:
+    container_name: taxi-back
+    restart: always
+    build: ./taxi-back
+    ports:
+      - "2000:2000"
+    depends_on:
+      - taxi-mongo
+  
+  taxi-mongo:
+    container_name: taxi-mongo
+    restart: always
+    image: mongo:4.4
+    volumes:
+      - ./taxi-mongo/mongodb.conf:/etc/mongodb.conf
