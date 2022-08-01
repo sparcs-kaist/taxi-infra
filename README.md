@@ -13,6 +13,3 @@ DB_PATH=mongodb://taxi-mongo:27017/taxi // FIXME
 SPARCSSSO_REPLACE=true // FIXME
 NODE_PORT=2000
 ```
-
-### Add `.env.mongo`
- - Refer to [.env.mongo.example](.env.mongo.example) and write your own `.env.mongo`.
