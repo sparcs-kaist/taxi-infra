@@ -4,18 +4,24 @@ services:
   taxi-front:
     container_name: taxi-front
     restart: always
-    build: ./taxi-front
+    build:
+      context: ./
+      dockerfile: ./taxi-front/Dockerfile
     ports:
       - "3000:3000"
   
   taxi-back:
     container_name: taxi-back
     restart: always
-    build: ./taxi-back
+    build: 
+      context: ./
+      dockerfile: ./taxi-back/Dockerfile
     ports:
       - "2000:2000"
     depends_on:
       - taxi-mongo
+    links:
+      - taxi-mongo:taxi-mongo
   
   taxi-mongo:
     container_name: taxi-mongo

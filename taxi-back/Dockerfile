@@ -9,11 +9,12 @@ WORKDIR /usr/src/app
 RUN git clone https://github.com/sparcs-kaist/taxi-back .
 
 # Load environment variables
-COPY ./.env.back /usr/src/app/.env.production
+COPY .env.back /usr/src/app/.env.development
 
 # Install requirements
 RUN npm install
+RUN npm install pm2 -g
 
 # Run container
-EXPOSE 80
-CMD ["npm", "start", "serve"]
+EXPOSE 2000
+CMD ["npm", "run", "start"]

@@ -9,7 +9,7 @@ WORKDIR /usr/src/app
 RUN git clone https://github.com/sparcs-kaist/taxi-front .
 
 # Load environment variables
-COPY ./.env.front /usr/src/app/.env
+COPY .env.front /usr/src/app/.env
 
 # Install requirements
 RUN npm install
