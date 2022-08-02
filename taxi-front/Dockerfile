@@ -13,7 +13,9 @@ COPY .env.front /usr/src/app/.env
 
 # Install requirements
 RUN npm install
+RUN npm install serve -g
 RUN npm run build
 
 # Run container
 EXPOSE 3000
+CMD ["npx", "serve", "-s", "build", "-l", "3000"]

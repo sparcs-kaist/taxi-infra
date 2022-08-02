@@ -13,7 +13,6 @@ COPY .env.back /usr/src/app/.env.development
 
 # Install requirements
 RUN npm install
-RUN npm install pm2 -g
 
 # Run container
 EXPOSE 2000
