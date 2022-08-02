@@ -8,12 +8,10 @@ RUN apk add --no-cache \
 WORKDIR /usr/src/app
 RUN git clone https://github.com/sparcs-kaist/taxi-back .
 
-# Load environment variables
-COPY .env.back /usr/src/app/.env.development
-
 # Install requirements
 RUN npm install
 
 # Run container
-EXPOSE 2000
+EXPOSE 80
+ENV PORT 80
 CMD ["npm", "run", "start"]

@@ -8,14 +8,10 @@ RUN apk add --no-cache \
 WORKDIR /usr/src/app
 RUN git clone https://github.com/sparcs-kaist/taxi-front .
 
-# Load environment variables
-COPY .env.front /usr/src/app/.env
-
 # Install requirements
 RUN npm install
 RUN npm install serve -g
-RUN npm run build
 
 # Run container
-EXPOSE 3000
-CMD ["npx", "serve", "-s", "build", "-l", "3000"]
+EXPOSE 80
+CMD ["sh", "-c", "npm run build && serve -s build -l 80"]

@@ -4,24 +4,36 @@ services:
   taxi-front:
     container_name: taxi-front
     restart: always
-    build:
-      context: ./
-      dockerfile: ./taxi-front/Dockerfile
+    build: taxi-front
     ports:
-      - "3000:3000"
+      - "${FRONT_PORT}:80"
+    environment:
+      - REACT_APP_BACK_URL=${BACK_URL}
+      - REACT_APP_S3_URL=${S3_URL}
   
   taxi-back:
     container_name: taxi-back
     restart: always
-    build: 
-      context: ./
-      dockerfile: ./taxi-back/Dockerfile
+    build: taxi-back
     ports:
-      - "2000:2000"
+      - "${BACK_PORT}:80"
     depends_on:
       - taxi-mongo
+      - taxi-redis
     links:
       - taxi-mongo:taxi-mongo
+      - taxi-redis:taxi-redis
+    environment:
+      - SESSION_KEY=${SESSION_KEY}
+      - SPARCSSSO_CLIENT_ID=${SPARCSSSO_CLIENT_ID}
+      - SPARCSSSO_CLIENT_KEY=${SPARCSSSO_CLIENT_KEY}
+      - FRONT_URL=${FRONT_URL}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME}
+
+      - DB_PATH=mongodb://taxi-mongo:27017/taxi
+      - REDIS_PATH=redis://taxi-redis:6379
   
   taxi-mongo:
     container_name: taxi-mongo
@@ -29,3 +41,8 @@ services:
     image: mongo:4.4
     volumes:
       - ./taxi-mongo/mongodb.conf:/etc/mongodb.conf
+  
+  taxi-redis:
+    container_name: taxi-redis
+    restart: always
+    image: redis:7.0.4-alpine
