@@ -3,6 +3,7 @@
 ## Setup
 
 ### Add `.env`
+
 ```
 FRONT_URL=https://taxi.sparcs.org
 BACK_URL=https://taxi.sparcs.org:444
@@ -17,10 +18,23 @@ AWS_SECRET_ACCESS_KEY=
 AWS_S3_BUCKET_NAME=sparcs-taxi-prod
 ```
 
-### Compose up
+### Create named volumes to store persistent MongoDB data & logs, backend logs
+
 ```bash
-$ docker-compose up -d
+$ docker volume create taxi-mongo-logs
+taxi-mongo-logs
+$ docker volume create taxi-mongo-data
+taxi-mongo-data
+$ docker volume create taxi-back-logs
+taxi-back-logs
+```
+
+### Compose up
+
+```bash
+docker-compose up -d
 ```
 
 ### ~~Build Reverse proxy~~
- - ~~See [reverse-proxy/README.md](reverse-proxy/README.md)~~
+
+- ~~See [reverse-proxy/README.md](reverse-proxy/README.md)~~
