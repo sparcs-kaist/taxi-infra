@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   taxi-front:
@@ -10,7 +10,7 @@ services:
     environment:
       - REACT_APP_BACK_URL=${BACK_URL}
       - REACT_APP_S3_URL=${S3_URL}
-  
+
   taxi-back:
     container_name: taxi-back
     restart: always
@@ -31,18 +31,29 @@ services:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME}
-
       - DB_PATH=mongodb://taxi-mongo:27017/taxi
       - REDIS_PATH=redis://taxi-redis:6379
-  
+    volumes:
+      - taxi-back-logs:/usr/src/app:rw
+
   taxi-mongo:
     container_name: taxi-mongo
     restart: always
     image: mongo:4.4
     volumes:
       - ./taxi-mongo/mongodb.conf:/etc/mongodb.conf
-  
+      - taxi-mongo-logs:/var/log/mongodb/mongod.log:rw
+      - taxi-mongo-data:/data/db:rw
+
   taxi-redis:
     container_name: taxi-redis
     restart: always
     image: redis:7.0.4-alpine
+
+volumes:
+  taxi-mongo-logs:
+    external: true
+  taxi-mongo-data:
+    external: true
+  taxi-back-logs:
+    external: true
