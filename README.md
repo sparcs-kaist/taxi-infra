@@ -4,9 +4,10 @@
 
 ### Add `.env`
 
-```
+```bash
 FRONT_URL=https://taxi.sparcs.org
 BACK_URL=https://taxi.sparcs.org:444
+SOCKET_IO_URL=https://taxi.sparcs.org:444
 S3_URL=https://sparcs-taxi-prod.s3.ap-northeast-2.amazonaws.com
 FRONT_PORT=80
 BACK_PORT=81
