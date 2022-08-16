@@ -9,6 +9,7 @@ services:
       - "${FRONT_PORT}:80"
     environment:
       - REACT_APP_BACK_URL=${BACK_URL}
+      - REACT_APP_IO_URL=${SOCKET_IO_URL}
       - REACT_APP_S3_URL=${S3_URL}
 
   taxi-back:
