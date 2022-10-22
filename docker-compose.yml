@@ -62,6 +62,8 @@ services:
       - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME}
       - MONGODB_HOST=taxi-mongo:27017
       - MONGODB_NAME=taxi
+    volumes:
+      - taxi-back-logs:/var/log/cron.log:rw
 
 volumes:
   taxi-mongo-logs:
