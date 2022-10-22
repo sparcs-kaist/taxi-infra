@@ -56,6 +56,8 @@ services:
     container_name: taxi-scheduler
     restart: always
     build: taxi-scheduler
+    links:
+      - taxi-mongo
     environment:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
@@ -63,7 +65,7 @@ services:
       - MONGODB_HOST=taxi-mongo:27017
       - MONGODB_NAME=taxi
     volumes:
-      - taxi-back-logs:/var/log/cron.log:rw
+      - taxi-scheduler-logs:/var/log/cron.log:rw
 
 volumes:
   taxi-mongo-logs:
@@ -71,4 +73,6 @@ volumes:
   taxi-mongo-data:
     external: true
   taxi-back-logs:
+    external: true
+  taxi-scheduler-logs:
     external: true
