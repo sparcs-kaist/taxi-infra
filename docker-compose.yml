@@ -52,6 +52,17 @@ services:
     restart: always
     image: redis:7.0.4-alpine
 
+  taxi-scheduler:
+    container_name: taxi-scheduler
+    restart: always
+    build: taxi-scheduler
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME}
+      - MONGODB_HOST=taxi-mongo:27017
+      - MONGODB_NAME=taxi
+
 volumes:
   taxi-mongo-logs:
     external: true
