@@ -55,18 +55,16 @@ services:
   taxi-scheduler:
     container_name: taxi-scheduler
     restart: always
-    build: taxi-scheduler
+    image: halvves/mongodb-backup-s3:lates
     links:
       - taxi-mongo
     tty: true
     environment:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME}
-      - MONGODB_HOST=taxi-mongo:27017
-      - MONGODB_NAME=taxi
-    volumes:
-      - taxi-scheduler-logs:/var/log/cron.log:rw
+      - BUCKET=${AWS_S3_BUCKET_NAME}
+      - BACKUP_FOLDER=/dump
+      - CRON_TIME=* * * * *
 
 volumes:
   taxi-mongo-logs:

@@ -1,7 +1,7 @@
-FROM mongo
+# FROM halvves/mongodb-backup-s3:lates
 
-RUN apt-get update && apt-get -y install cron && apt-get -y install awscli
+# RUN apt-get update && apt-get -y install cron && apt-get -y install awscli
 
-RUN (crontab -l ; echo "* * * * * /dump.sh >> /var/log/cron.log") | crontab
+# RUN (crontab -l ; echo "* * * * * /dump.sh >> /var/log/cron.log") | crontab
 
-CMD cron
+# CMD cron
