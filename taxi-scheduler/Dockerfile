@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM mongo
 
 RUN apt-get update && apt-get -y install cron && apt-get install awscli
 
