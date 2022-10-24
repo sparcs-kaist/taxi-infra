@@ -7,4 +7,5 @@ ENV CRON_TIME="* * * * *" \
   CRON_TZ=Asia/Seoul
 
 ADD dump.sh /dump.sh
+RUN chmod +x /dump.sh
 CMD /dump.sh
