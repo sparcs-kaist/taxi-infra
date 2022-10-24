@@ -65,7 +65,8 @@ services:
       - BACKUP_FOLDER=dump/
       - MONGODB_HOST=taxi-mongo:27017
       - DB_STR=taxi
-
+    volumes:
+      - taxi-scheduler-logs:/mongo_backup.log:rw
 volumes:
   taxi-mongo-logs:
     external: true

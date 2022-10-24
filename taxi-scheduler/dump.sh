@@ -10,7 +10,6 @@ cat <<EOF >> /backup.sh
 TIMESTAMP=\`/bin/date +"%Y%m%dT%H%M%S"\`
 BACKUP_NAME=\${TIMESTAMP}.dump.gz
 S3BACKUP=${S3PATH}\${BACKUP_NAME}
-S3LATEST=${S3PATH}latest.dump.gz
 echo "=> Backup started"
 if mongodump --host ${MONGODB_HOST} --db ${DB_STR} --archive=\${BACKUP_NAME} --gzip && aws s3 cp \${BACKUP_NAME} \${S3BACKUP} && rm \${BACKUP_NAME} ;then
     echo "   > Backup succeeded"
