@@ -16,7 +16,6 @@
 S3PATH="s3://$BUCKET/$BACKUP_FOLDER"
 printenv | sed 's/^\([a-zA-Z0-9_]*\)=\(.*\)$/export \1="\2"/g' | grep -E "^export AWS" > /root/project_env.sh
 
-cat /root/project_env.sh
 
 echo "=> Creating backup script"
 rm -f /backup.sh
