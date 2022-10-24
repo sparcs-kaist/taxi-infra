@@ -65,6 +65,8 @@ services:
       - BUCKET=${AWS_S3_BUCKET_NAME}
       - BACKUP_FOLDER=/dump
       - CRON_TIME=* * * * *
+      - MONGODB_HOST=taxi-mongo:27017
+      - DB_STR = taxi
 
 volumes:
   taxi-mongo-logs:
