@@ -21,6 +21,7 @@ echo "=> Creating backup script"
 rm -f /backup.sh
 cat <<EOF >> /backup.sh
 #!/bin/bash
+echo "hihi"
 TIMESTAMP=\`/bin/date +"%Y%m%dT%H%M%S"\`
 BACKUP_NAME=\${TIMESTAMP}.dump.gz
 echo " > Backup name ${BACKUP_NAME}"
@@ -45,7 +46,9 @@ EOF
 chmod +x /listbackups.sh
 echo "=> List script created"
 
-echo "${CRON_TIME} . /root/project_env.sh; /backup.sh" > /crontab.conf
+touch /mongo_backup.log
+
+echo "${CRON_TIME} . /root/project_env.sh; /backup.sh >> /mongo_backup.log 2>&1" > /crontab.conf
 crontab  /crontab.conf
 echo "=> Running cron job"
-cron
+cron && tail -f /mongo_backup.log
