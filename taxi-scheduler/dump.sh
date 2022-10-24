@@ -45,12 +45,7 @@ EOF
 chmod +x /listbackups.sh
 echo "=> List script created"
 
-ln -s /backup.sh /usr/bin/backup
-ln -s /listbackups.sh /usr/bin/listbackups
-
-touch /mongo_backup.log
-
-echo "${CRON_TIME} . /root/project_env.sh; /backup.sh > /crontab.conf
+echo "${CRON_TIME} . /root/project_env.sh; /backup.sh" > /crontab.conf
 crontab  /crontab.conf
 echo "=> Running cron job"
 cron
