@@ -66,7 +66,7 @@ services:
       - BACKUP_FOLDER=/dump
       - CRON_TIME=* * * * *
       - MONGODB_HOST=taxi-mongo:27017
-      - DB_STR = taxi
+      - DB_STR=taxi
 
 volumes:
   taxi-mongo-logs:
