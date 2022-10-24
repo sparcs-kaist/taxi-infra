@@ -55,7 +55,7 @@ services:
   taxi-scheduler:
     container_name: taxi-scheduler
     restart: always
-    image: halvves/mongodb-backup-s3:latest
+    build: taxi-scheduler
     links:
       - taxi-mongo:mongodb
     tty: true
