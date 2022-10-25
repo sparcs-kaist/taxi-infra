@@ -29,6 +29,8 @@ $ docker volume create taxi-mongo-data
 taxi-mongo-data
 $ docker volume create taxi-back-logs
 taxi-back-logs
+$ docker volume create taxi-scheduler-logs
+taxi-scheduler-logs
 ```
 
 ### Compose up
