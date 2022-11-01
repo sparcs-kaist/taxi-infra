@@ -18,6 +18,7 @@ AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
 AWS_S3_BUCKET_NAME=sparcs-taxi-prod
 CHANNELTALK_PLUGIN_KEY=
+GA_TRACKING_ID=
 ```
 
 ### Create named volumes to store persistent MongoDB data & logs, backend logs

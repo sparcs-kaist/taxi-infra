@@ -12,6 +12,7 @@ services:
       - REACT_APP_IO_URL=${SOCKET_IO_URL}
       - REACT_APP_S3_URL=${S3_URL}
       - REACT_APP_CHANNELTALK_PLUGIN_KEY=${CHANNELTALK_PLUGIN_KEY}
+      - REACT_APP_GA_TRACKING_ID=${GA_TRACKING_ID}
 
   taxi-back:
     container_name: taxi-back
