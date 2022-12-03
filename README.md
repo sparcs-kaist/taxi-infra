@@ -2,12 +2,16 @@
 
 ## Setup
 
-### Build Images
+### Build Images (for dev service)
 
 ```bash
 $ docker build -t taxi-front:latest ./taxi-front
 $ docker build -t taxi-back:latest ./taxi-back
 ```
+
+### Login to AWS ECR (for prod service)
+
+See ["Using Amazon ECR with the AWS CLI"](https://docs.aws.amazon.com/AmazonECR/latest/userguide/getting-started-cli.html).
 
 ### Add `.env`
 
