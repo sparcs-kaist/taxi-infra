@@ -2,16 +2,41 @@
 
 ## Setup
 
-### Add `.env`
+### Build Images
 
 ```bash
+$ docker build -t taxi-front:latest ./taxi-front
+$ docker build -t taxi-back:latest ./taxi-back
+```
+
+### Add `.env`
+
+Environments for dev service
+
+```
+FRONT_URL=http://localhost:3000
+BACK_URL=http://localhost:9000
+SOCKET_IO_URL=http://localhost:9000
+S3_URL=https://sparcs-taxi-dev.s3.ap-northeast-2.amazonaws.com
+FRONT_PORT=3000
+BACK_PORT=9000
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_S3_BUCKET_NAME=sparcs-taxi-dev
+```
+
+Environments for prod service
+
+```
+FRONT_IMAGE=666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-front:latest
+BACK_IMAGE=666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-back:latest
 FRONT_URL=https://taxi.sparcs.org
-BACK_URL=https://taxi.sparcs.org:444
-SOCKET_IO_URL=https://taxi.sparcs.org:444
+BACK_URL=https://taxi.sparcs.org/api
+SOCKET_IO_URL=https://taxi.sparcs.org/api
 S3_URL=https://sparcs-taxi-prod.s3.ap-northeast-2.amazonaws.com
 FRONT_PORT=80
 BACK_PORT=81
-SESSION_KEY=session-key
+SESSION_KEY=
 SPARCSSSO_CLIENT_ID=
 SPARCSSSO_CLIENT_KEY=
 AWS_ACCESS_KEY_ID=

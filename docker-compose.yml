@@ -4,23 +4,22 @@ services:
   taxi-front:
     container_name: taxi-front
     restart: always
-    image: taxi-front:latest # taxi-front 이미지 가져오기
+    image: ${FRONT_IMAGE:-taxi-front}
     ports:
-      - "${FRONT_PORT}:80"
+      - "${FRONT_PORT:?err}:80"
     environment:
-      - REACT_APP_BACK_URL=${BACK_URL}
-      - REACT_APP_IO_URL=${SOCKET_IO_URL}
-      - REACT_APP_S3_URL=${S3_URL}
+      - REACT_APP_BACK_URL=${BACK_URL:?err}
+      - REACT_APP_IO_URL=${SOCKET_IO_URL:?err}
+      - REACT_APP_S3_URL=${S3_URL:?err}
       - REACT_APP_CHANNELTALK_PLUGIN_KEY=${CHANNELTALK_PLUGIN_KEY}
       - REACT_APP_GA_TRACKING_ID=${GA_TRACKING_ID}
 
   taxi-back:
     container_name: taxi-back
     restart: always
-    # image: # taxi-back 이미지 가져오기
-    build: taxi-back
+    image: ${BACK_IMAGE:-taxi-back}
     ports:
-      - "${BACK_PORT}:80"
+      - "${BACK_PORT:?err}:80"
     depends_on:
       - taxi-mongo
       - taxi-redis
@@ -28,13 +27,13 @@ services:
       - taxi-mongo:taxi-mongo
       - taxi-redis:taxi-redis
     environment:
-      - SESSION_KEY=${SESSION_KEY}
+      - SESSION_KEY=${SESSION_KEY:-sessionKey}
       - SPARCSSSO_CLIENT_ID=${SPARCSSSO_CLIENT_ID}
       - SPARCSSSO_CLIENT_KEY=${SPARCSSSO_CLIENT_KEY}
-      - FRONT_URL=${FRONT_URL}
+      - FRONT_URL=${FRONT_URL:?err}
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME}
+      - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME:-sparcs-taxi-dev}
       - DB_PATH=mongodb://taxi-mongo:27017/taxi
       - REDIS_PATH=redis://taxi-redis:6379
     volumes:
