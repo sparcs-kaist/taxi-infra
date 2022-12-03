@@ -77,6 +77,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - TZ=Asia/Seoul
+      - REPO_USER=${AWS_ECR_REPO_USER:-AWS}
+      - REPO_PASS=${AWS_ECR_REPO_PASS}
     command: --schedule "0 4 * * *" --cleanup taxi-front taxi-back
     # --schedule "0 4 * * *" : 새로운 이미지를 확인하는 cron 표현식 지정
     # --interval 30 : 이미지 업데이트를 30초 마다 하도록 지정
