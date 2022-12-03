@@ -39,7 +39,3 @@ taxi-scheduler-logs
 ```bash
 docker-compose up -d
 ```
-
-### ~~Build Reverse proxy~~
-
-- ~~See [reverse-proxy/README.md](reverse-proxy/README.md)~~
