@@ -1,0 +1,73 @@
+version: "3"
+
+services:
+  taxi-front:
+    container_name: taxi-front-dev
+    restart: always
+    image: ${FRONT_IMAGE:-taxi-front}
+    ports:
+      - "${FRONT_PORT:?err}:80"
+    environment:
+      - REACT_APP_BACK_URL=${BACK_URL:?err}
+      - REACT_APP_IO_URL=${SOCKET_IO_URL:?err}
+      - REACT_APP_S3_URL=${S3_URL:?err}
+      - REACT_APP_CHANNELTALK_PLUGIN_KEY=${CHANNELTALK_PLUGIN_KEY}
+      - REACT_APP_GA_TRACKING_ID=${GA_TRACKING_ID}
+
+  taxi-back:
+    container_name: taxi-back-dev
+    restart: always
+    image: ${BACK_IMAGE:-taxi-back}
+    ports:
+      - "${BACK_PORT:?err}:80"
+    depends_on:
+      - taxi-mongo
+      - taxi-redis
+    links:
+      - taxi-mongo:taxi-mongo
+      - taxi-redis:taxi-redis
+    environment:
+      - SESSION_KEY=${SESSION_KEY:-sessionKey}
+      - SPARCSSSO_CLIENT_ID=${SPARCSSSO_CLIENT_ID}
+      - SPARCSSSO_CLIENT_KEY=${SPARCSSSO_CLIENT_KEY}
+      - FRONT_URL=${FRONT_URL:?err}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME:-sparcs-taxi-dev}
+      - DB_PATH=mongodb://taxi-mongo:27017/taxi
+      - REDIS_PATH=redis://taxi-redis:6379
+    volumes:
+      - taxi-back-dev-logs:/usr/src/app/logs:rw
+
+  taxi-mongo:
+    container_name: taxi-mongo-dev
+    restart: always
+    image: mongo:4.4
+    volumes:
+      - ./taxi-mongo/mongodb.conf:/etc/mongodb.conf
+
+  taxi-redis:
+    container_name: taxi-redis-dev
+    restart: always
+    image: redis:7.0.4-alpine
+
+  taxi-watchtower:
+    container_name: taxi-watchtower-dev
+    image: containrrr/watchtower:1.5.1
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - TZ=Asia/Seoul
+      - REPO_USER=${AWS_ECR_REPO_USER:-AWS}
+      - REPO_PASS=${AWS_ECR_REPO_PASS}
+    command: --interval 60 --cleanup taxi-front-dev taxi-back-dev
+    # --schedule "0 4 * * *" : 새로운 이미지를 확인하는 cron 표현식 지정
+    # --interval 60 : 이미지 업데이트를 30초 마다 하도록 지정
+    # --cleanup : 업데이트 후 오래된 이미지 제거
+    # taxi-front taxi-back : 업데이트 할 container 지정
+    # further work : https://containrrr.dev/watchtower/lifecycle-hooks/ 로 후크 지정
+
+volumes:
+  taxi-back-dev-logs:
+    external: true
