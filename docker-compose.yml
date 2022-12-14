@@ -13,6 +13,9 @@ services:
       - REACT_APP_S3_URL=${S3_URL:?err}
       - REACT_APP_CHANNELTALK_PLUGIN_KEY=${CHANNELTALK_PLUGIN_KEY}
       - REACT_APP_GA_TRACKING_ID=${GA_TRACKING_ID}
+    labels:
+      - "com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H 'Content-type: application/json' --data '{\"text\":\"[PROD] 업데이트를 위해 taxi-front 서비스를 종료시켰습니다.\"}' ${SLACK_WATCHTOWER_WEBHOOK}"
+      - "com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H 'Content-type: application/json' --data '{\"text\":\"[PROD] 업데이트 후 taxi-front 서비스를 재시작하였습니다.\"}' ${SLACK_WATCHTOWER_WEBHOOK}"
 
   taxi-back:
     container_name: taxi-back
@@ -36,6 +39,9 @@ services:
       - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME:-sparcs-taxi-dev}
       - DB_PATH=mongodb://taxi-mongo:27017/taxi
       - REDIS_PATH=redis://taxi-redis:6379
+    labels:
+      - "com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H 'Content-type: application/json' --data '{\"text\":\"[PROD] 업데이트를 위해 taxi-back 서비스를 종료시켰습니다.\"}' ${SLACK_WATCHTOWER_WEBHOOK}"
+      - "com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H 'Content-type: application/json' --data '{\"text\":\"[PROD] 업데이트 후 taxi-back 서비스를 재시작하였습니다.\"}' ${SLACK_WATCHTOWER_WEBHOOK}"
     volumes:
       - taxi-back-logs:/usr/src/app/logs:rw
 
@@ -85,7 +91,6 @@ services:
     # --cleanup : 업데이트 후 오래된 이미지 제거
     # --enable-lifecycle-hooks : 컨테이너 업데이트 시 스크립트 실행 활성화
     # taxi-front taxi-back : 업데이트 할 container 지정
-    # further work : https://containrrr.dev/watchtower/lifecycle-hooks/ 로 후크 지정
 
 volumes:
   taxi-mongo-logs:

@@ -49,6 +49,7 @@ AWS_S3_BUCKET_NAME=sparcs-taxi-prod
 AWS_ECR_REPO_PASS=
 CHANNELTALK_PLUGIN_KEY=
 GA_TRACKING_ID=
+SLACK_WATCHTOWER_WEBHOOK=
 ```
 
 ### Create named volumes to store persistent MongoDB data & logs, backend logs
