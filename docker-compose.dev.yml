@@ -61,10 +61,11 @@ services:
       - TZ=Asia/Seoul
       - REPO_USER=${AWS_ECR_REPO_USER:-AWS}
       - REPO_PASS=${AWS_ECR_REPO_PASS}
-    command: --interval 60 --cleanup taxi-front-dev taxi-back-dev
+    command: --interval 60 --cleanup --enable-lifecycle-hooks taxi-front-dev taxi-back-dev
     # --schedule "0 4 * * *" : 새로운 이미지를 확인하는 cron 표현식 지정
     # --interval 60 : 이미지 업데이트를 30초 마다 하도록 지정
     # --cleanup : 업데이트 후 오래된 이미지 제거
+    # --enable-lifecycle-hooks : 컨테이너 업데이트 시 스크립트 실행 활성화
     # taxi-front taxi-back : 업데이트 할 container 지정
     # further work : https://containrrr.dev/watchtower/lifecycle-hooks/ 로 후크 지정
 
