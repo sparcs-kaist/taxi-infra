@@ -77,17 +77,21 @@ services:
 
   taxi-watchtower:
     container_name: taxi-watchtower
-    image: containrrr/watchtower:1.5.1
+    image: containrrr/watchtower:latest
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./taxi-ecr-helper/config.json:/config.json
+      - taxi-ecr-helper-executable:/go/bin
     environment:
+      - HOME=/
       - TZ=Asia/Seoul
-      - REPO_USER=${AWS_ECR_REPO_USER:-AWS}
-      - REPO_PASS=${AWS_ECR_REPO_PASS}
+      - PATH=$PATH:/go/bin
+      - AWS_REGION=ap-northeast-2
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?err}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?err}
     command: --schedule "0 4 * * *" --cleanup --enable-lifecycle-hooks taxi-front taxi-back
     # --schedule "0 4 * * *" : 새로운 이미지를 확인하는 cron 표현식 지정
-    # --interval 30 : 이미지 업데이트를 30초 마다 하도록 지정
     # --cleanup : 업데이트 후 오래된 이미지 제거
     # --enable-lifecycle-hooks : 컨테이너 업데이트 시 스크립트 실행 활성화
     # taxi-front taxi-back : 업데이트 할 container 지정
@@ -100,4 +104,6 @@ volumes:
   taxi-back-logs:
     external: true
   taxi-scheduler-logs:
+    external: true
+  taxi-ecr-helper-executable:
     external: true
