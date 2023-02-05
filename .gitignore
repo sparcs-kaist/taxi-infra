@@ -1,2 +1,5 @@
+.vscode
 .env
+
+# ECR config containing the user's AWS ID
 taxi-ecr-helper/config.json
