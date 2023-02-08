@@ -52,6 +52,7 @@ services:
     image: mongo:4.4
     volumes:
       - ./taxi-mongo/mongodb.conf:/etc/mongodb.conf
+      - taxi-mongo-dev-data:/data/db:rw
 
   taxi-redis:
     container_name: taxi-redis-dev
@@ -81,6 +82,8 @@ services:
 
 volumes:
   taxi-back-dev-logs:
+    external: true
+  taxi-mongo-dev-data:
     external: true
   taxi-ecr-helper-executable:
     external: true
