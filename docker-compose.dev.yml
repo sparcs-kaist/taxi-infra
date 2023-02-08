@@ -2,7 +2,7 @@ version: "3"
 
 services:
   taxi-front:
-    container_name: taxi-front
+    container_name: taxi-front-dev
     restart: always
     image: ${FRONT_IMAGE:-taxi-front}
     ports:
@@ -14,11 +14,11 @@ services:
       - REACT_APP_CHANNELTALK_PLUGIN_KEY=${CHANNELTALK_PLUGIN_KEY}
       - REACT_APP_GA_TRACKING_ID=${GA_TRACKING_ID}
     labels:
-      - 'com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"[PROD] 업데이트를 위해 taxi-front 서비스를 종료시켰습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
-      - 'com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"[PROD] 업데이트 후 taxi-front 서비스를 재시작하였습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
+      - 'com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트를 위해 taxi-front-dev 서비스를 종료시켰습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
+      - 'com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트 후 taxi-front-dev 서비스를 재시작하였습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
 
   taxi-back:
-    container_name: taxi-back
+    container_name: taxi-back-dev
     restart: always
     image: ${BACK_IMAGE:-taxi-back}
     ports:
@@ -40,43 +40,25 @@ services:
       - DB_PATH=mongodb://taxi-mongo:27017/taxi
       - REDIS_PATH=redis://taxi-redis:6379
     labels:
-      - 'com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"[PROD] 업데이트를 위해 taxi-back 서비스를 종료시켰습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
-      - 'com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"[PROD] 업데이트 후 taxi-back 서비스를 재시작하였습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
+      - 'com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트를 위해 taxi-back-dev 서비스를 종료시켰습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
+      - 'com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트 후 taxi-back-dev 서비스를 재시작하였습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
     volumes:
-      - taxi-back-logs:/usr/src/app/logs:rw
+      - taxi-back-dev-logs:/usr/src/app/logs:rw
 
   taxi-mongo:
-    container_name: taxi-mongo
+    container_name: taxi-mongo-dev
     restart: always
     image: mongo:4.4
     volumes:
       - ./taxi-mongo/mongodb.conf:/etc/mongodb.conf
-      - taxi-mongo-logs:/var/log/mongodb/mongod.log:rw
-      - taxi-mongo-data:/data/db:rw
 
   taxi-redis:
-    container_name: taxi-redis
+    container_name: taxi-redis-dev
     restart: always
     image: redis:7.0.4-alpine
 
-  taxi-scheduler:
-    container_name: taxi-scheduler
-    restart: always
-    build: taxi-scheduler
-    links:
-      - taxi-mongo:mongodb
-    environment:
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - BUCKET=${AWS_S3_BUCKET_NAME}
-      - BACKUP_FOLDER=dump/
-      - MONGODB_HOST=taxi-mongo:27017
-      - DB_STR=taxi
-    volumes:
-      - taxi-scheduler-logs:/backup_log:rw
-
   taxi-watchtower:
-    container_name: taxi-watchtower
+    container_name: taxi-watchtower-dev
     image: containrrr/watchtower:latest
     restart: always
     volumes:
@@ -90,20 +72,14 @@ services:
       - AWS_REGION=ap-northeast-2
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?err}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?err}
-    command: --schedule "0 0 4 * * *" --cleanup --enable-lifecycle-hooks taxi-front taxi-back
-    # --schedule "0 0 4 * * *" : 새로운 이미지를 확인하는 6-field cron 표현식 지정
+    command: --debug --interval 60 --cleanup --enable-lifecycle-hooks taxi-front-dev taxi-back-dev
+    # --interval 60 : 이미지 업데이트를 60초 마다 하도록 지정
     # --cleanup : 업데이트 후 오래된 이미지 제거
     # --enable-lifecycle-hooks : 컨테이너 업데이트 시 스크립트 실행 활성화
     # taxi-front taxi-back : 업데이트 할 container 지정
 
 volumes:
-  taxi-mongo-logs:
-    external: true
-  taxi-mongo-data:
-    external: true
-  taxi-back-logs:
-    external: true
-  taxi-scheduler-logs:
+  taxi-back-dev-logs:
     external: true
   taxi-ecr-helper-executable:
     external: true
