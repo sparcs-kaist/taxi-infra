@@ -34,11 +34,13 @@ services:
       - SPARCSSSO_CLIENT_ID=${SPARCSSSO_CLIENT_ID}
       - SPARCSSSO_CLIENT_KEY=${SPARCSSSO_CLIENT_KEY}
       - FRONT_URL=${FRONT_URL:?err}
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME:-sparcs-taxi-dev}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?err}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?err}
+      - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME:-sparcs-taxi-prod}
       - DB_PATH=mongodb://taxi-mongo:27017/taxi
       - REDIS_PATH=redis://taxi-redis:6379
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:?err}
+      - APP_URI_SCHEME=${APP_URI_SCHEME:?err}
     labels:
       - 'com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"[PROD] 업데이트를 위해 taxi-back 서비스를 종료시켰습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
       - 'com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"[PROD] 업데이트 후 taxi-back 서비스를 재시작하였습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'

@@ -18,15 +18,25 @@ See ["Using Amazon ECR with the AWS CLI"](https://docs.aws.amazon.com/AmazonECR/
 Environments for dev service
 
 ```
+FRONT_IMAGE=666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-front:dev
+BACK_IMAGE=666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-back:dev
 FRONT_URL=http://localhost:3000
 BACK_URL=http://localhost:9000
 SOCKET_IO_URL=http://localhost:9000
 S3_URL=https://sparcs-taxi-dev.s3.ap-northeast-2.amazonaws.com
 FRONT_PORT=3000
 BACK_PORT=9000
+SESSION_KEY=
+JWT_SECRET_KEY=
+APP_URI_SCHEME=org.sparcs.taxiApp
+SPARCSSSO_CLIENT_ID=
+SPARCSSSO_CLIENT_KEY=
 AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
 AWS_S3_BUCKET_NAME=sparcs-taxi-dev
+CHANNELTALK_PLUGIN_KEY=
+GA_TRACKING_ID=
+SLACK_WATCHTOWER_WEBHOOK=
 ```
 
 Environments for prod service
@@ -41,12 +51,13 @@ S3_URL=https://sparcs-taxi-prod.s3.ap-northeast-2.amazonaws.com
 FRONT_PORT=80
 BACK_PORT=81
 SESSION_KEY=
+JWT_SECRET_KEY=
+APP_URI_SCHEME=org.sparcs.taxiApp
 SPARCSSSO_CLIENT_ID=
 SPARCSSSO_CLIENT_KEY=
 AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
 AWS_S3_BUCKET_NAME=sparcs-taxi-prod
-AWS_ECR_REPO_PASS=
 CHANNELTALK_PLUGIN_KEY=
 GA_TRACKING_ID=
 SLACK_WATCHTOWER_WEBHOOK=
