@@ -44,6 +44,7 @@ services:
       - 'com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트 후 taxi-back-dev 서비스를 재시작하였습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
     volumes:
       - taxi-back-dev-logs:/usr/src/app/logs:rw
+    command: npm run start
 
   taxi-mongo:
     container_name: taxi-mongo-dev
@@ -51,6 +52,7 @@ services:
     image: mongo:4.4
     volumes:
       - ./taxi-mongo/mongodb.conf:/etc/mongodb.conf
+      - taxi-mongo-dev-data:/data/db:rw
 
   taxi-redis:
     container_name: taxi-redis-dev
@@ -80,6 +82,8 @@ services:
 
 volumes:
   taxi-back-dev-logs:
+    external: true
+  taxi-mongo-dev-data:
     external: true
   taxi-ecr-helper-executable:
     external: true
