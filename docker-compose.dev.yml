@@ -13,6 +13,7 @@ services:
       - REACT_APP_S3_URL=${S3_URL:?err}
       - REACT_APP_CHANNELTALK_PLUGIN_KEY=${CHANNELTALK_PLUGIN_KEY}
       - REACT_APP_GA_TRACKING_ID=${GA_TRACKING_ID}
+      - REACT_APP_FIREBASE_CONFIG=${FIREBASE_CONFIG}
     labels:
       - 'com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트를 위해 taxi-front-dev 서비스를 종료시켰습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
       - 'com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트 후 taxi-front-dev 서비스를 재시작하였습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
@@ -41,6 +42,7 @@ services:
       - REDIS_PATH=redis://taxi-redis:6379
       - JWT_SECRET_KEY=${JWT_SECRET_KEY:?err}
       - APP_URI_SCHEME=${APP_URI_SCHEME:?err}
+      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
     labels:
       - 'com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트를 위해 taxi-back-dev 서비스를 종료시켰습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
       - 'com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트 후 taxi-back-dev 서비스를 재시작하였습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
