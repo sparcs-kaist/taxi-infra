@@ -73,7 +73,7 @@ services:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?err}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?err}
       - BUCKET=${AWS_S3_DUMP_BUCKET_NAME:?err}
-      - BACKUP_FOLDER=/
+      - BACKUP_FOLDER=mongodb-dump/
       - MONGODB_HOST=taxi-mongo:27017
       - DB_STR=taxi
     volumes:
