@@ -43,6 +43,7 @@ services:
       - JWT_SECRET_KEY=${JWT_SECRET_KEY:?err}
       - APP_URI_SCHEME=${APP_URI_SCHEME:?err}
       - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+      - TEST_ACCOUNTS=${TEST_ACCOUNTS}
     labels:
       - 'com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"[PROD] 업데이트를 위해 taxi-back 서비스를 종료시켰습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
       - 'com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"[PROD] 업데이트 후 taxi-back 서비스를 재시작하였습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'

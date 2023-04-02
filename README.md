@@ -66,6 +66,7 @@ GA_TRACKING_ID=
 GOOGLE_APPLICATION_CREDENTIALS=
 FIREBASE_CONFIG=
 SLACK_WATCHTOWER_WEBHOOK=
+TEST_ACCOUNTS=["suwon@sparcs.org","otl-android-test@sparcs.org"]
 ```
 
 ### Create named volumes to store persistent MongoDB data & logs, backend logs
