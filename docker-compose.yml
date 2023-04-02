@@ -43,6 +43,7 @@ services:
       - JWT_SECRET_KEY=${JWT_SECRET_KEY:?err}
       - APP_URI_SCHEME=${APP_URI_SCHEME:?err}
       - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+      - TEST_ACCOUNTS=${TEST_ACCOUNTS}
     labels:
       - 'com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"[PROD] 업데이트를 위해 taxi-back 서비스를 종료시켰습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
       - 'com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"[PROD] 업데이트 후 taxi-back 서비스를 재시작하였습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
@@ -70,10 +71,10 @@ services:
     links:
       - taxi-mongo:mongodb
     environment:
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - BUCKET=${AWS_S3_BUCKET_NAME}
-      - BACKUP_FOLDER=dump/
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?err}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?err}
+      - BUCKET=${AWS_S3_DUMP_BUCKET_NAME=:?err}
+      - BACKUP_FOLDER=mongodb-dump/
       - MONGODB_HOST=taxi-mongo:27017
       - DB_STR=taxi
     volumes:

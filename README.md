@@ -60,11 +60,13 @@ SPARCSSSO_CLIENT_KEY=
 AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
 AWS_S3_BUCKET_NAME=sparcs-taxi-prod
+AWS_S3_DUMP_BUCKET_NAME=
 CHANNELTALK_PLUGIN_KEY=
 GA_TRACKING_ID=
 GOOGLE_APPLICATION_CREDENTIALS=
 FIREBASE_CONFIG=
 SLACK_WATCHTOWER_WEBHOOK=
+TEST_ACCOUNTS=["suwon@sparcs.org","otl-android-test@sparcs.org"]
 ```
 
 ### Create named volumes to store persistent MongoDB data & logs, backend logs
