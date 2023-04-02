@@ -63,22 +63,6 @@ services:
     restart: always
     image: redis:7.0.4-alpine
 
-  taxi-scheduler:
-    container_name: taxi-scheduler-dev
-    restart: always
-    build: taxi-scheduler
-    links:
-      - taxi-mongo:mongodb
-    environment:
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?err}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?err}
-      - BUCKET=${AWS_S3_DUMP_BUCKET_NAME:?err}
-      - BACKUP_FOLDER=mongodb-dump/
-      - MONGODB_HOST=taxi-mongo:27017
-      - DB_STR=taxi
-    volumes:
-      - taxi-scheduler-dev-logs:/backup_log:rw
-
   taxi-watchtower:
     container_name: taxi-watchtower-dev
     image: containrrr/watchtower:latest
@@ -104,8 +88,6 @@ volumes:
   taxi-back-dev-logs:
     external: true
   taxi-mongo-dev-data:
-    external: true
-  taxi-scheduler-dev-logs:
     external: true
   taxi-ecr-helper-executable:
     external: true
