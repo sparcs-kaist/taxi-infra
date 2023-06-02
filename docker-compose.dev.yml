@@ -1,15 +1,26 @@
 version: "3"
 
 services:
+  taxi-proxy:
+    container_name: taxi-proxy-dev
+    restart: always
+    build: taxi-proxy
+    ports:
+      - "${PORT:?err}:80"
+    depends_on:
+      - taxi-front
+      - taxi-back
+    links:
+      - taxi-front:taxi-front
+      - taxi-back:taxi-back
+
   taxi-front:
     container_name: taxi-front-dev
     restart: always
     image: ${FRONT_IMAGE:-taxi-front}
-    ports:
-      - "${FRONT_PORT:?err}:80"
     environment:
-      - REACT_APP_BACK_URL=${BACK_URL:?err}
-      - REACT_APP_IO_URL=${SOCKET_IO_URL:?err}
+      - REACT_APP_BACK_URL=${HOST_NAME:?err}/api
+      - REACT_APP_IO_URL=${HOST_NAME:?err}
       - REACT_APP_S3_URL=${S3_URL:?err}
       - REACT_APP_CHANNELTALK_PLUGIN_KEY=${CHANNELTALK_PLUGIN_KEY}
       - REACT_APP_KAKAO_SDK_KEY=${KAKAO_SDK_KEY}
@@ -23,8 +34,6 @@ services:
     container_name: taxi-back-dev
     restart: always
     image: ${BACK_IMAGE:-taxi-back}
-    ports:
-      - "${BACK_PORT:?err}:80"
     depends_on:
       - taxi-mongo
       - taxi-redis
@@ -35,7 +44,7 @@ services:
       - SESSION_KEY=${SESSION_KEY:?err}
       - SPARCSSSO_CLIENT_ID=${SPARCSSSO_CLIENT_ID}
       - SPARCSSSO_CLIENT_KEY=${SPARCSSSO_CLIENT_KEY}
-      - FRONT_URL=${FRONT_URL:?err}
+      - FRONT_URL=${HOST_NAME:?err}
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?err}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?err}
       - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME:-sparcs-taxi-dev}
