@@ -70,7 +70,7 @@ services:
     links:
       - taxi-back:taxi-back
     environment:
-      - API_ROOM_INFO=https://taxi-back/rooms/publicInfo?id={}
+      - API_ROOM_INFO=http://taxi-back/rooms/publicInfo?id={}
 
   taxi-mongo:
     container_name: taxi-mongo-dev
