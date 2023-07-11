@@ -20,6 +20,7 @@ Environments for dev service
 ```
 FRONT_IMAGE=666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-front:dev
 BACK_IMAGE=666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-back:dev
+OG_IMAGE=666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-og-generator:dev
 HOST_NAME=https://taxi.dev.sparcs.org
 PORT=80
 S3_URL=https://sparcs-taxi-dev.s3.ap-northeast-2.amazonaws.com
@@ -44,6 +45,7 @@ Environments for prod service
 ```
 FRONT_IMAGE=666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-front:latest
 BACK_IMAGE=666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-back:latest
+OG_IMAGE=666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-og-generator:latest
 HOST_NAME=https://taxi.sparcs.org
 PORT=80
 S3_URL=https://sparcs-taxi-prod.s3.ap-northeast-2.amazonaws.com

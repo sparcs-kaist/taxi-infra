@@ -13,6 +13,7 @@ services:
     links:
       - taxi-front:taxi-front
       - taxi-back:taxi-back
+      - taxi-og-generator:taxi-og-generator
 
   taxi-front:
     container_name: taxi-front
@@ -59,6 +60,17 @@ services:
       - 'com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"[PROD] 업데이트 후 taxi-back 서비스를 재시작하였습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
     volumes:
       - taxi-back-logs:/usr/src/app/logs:rw
+
+  taxi-og-generator:
+    container_name: taxi-og-generator
+    restart: always
+    image: ${OG_IMAGE:-taxi-og-generator}
+    depends_on:
+      - taxi-back
+    links:
+      - taxi-back:taxi-back
+    environment:
+      - API_ROOM_INFO=https://taxi-back/rooms/publicInfo?id={}
 
   taxi-mongo:
     container_name: taxi-mongo

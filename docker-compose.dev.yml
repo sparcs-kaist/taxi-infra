@@ -13,6 +13,7 @@ services:
     links:
       - taxi-front:taxi-front
       - taxi-back:taxi-back
+      - taxi-og-generator:taxi-og-generator
 
   taxi-front:
     container_name: taxi-front-dev
@@ -59,6 +60,17 @@ services:
     volumes:
       - taxi-back-dev-logs:/usr/src/app/logs:rw
     command: npm run start
+
+  taxi-og-generator:
+    container_name: taxi-og-generator-dev
+    restart: always
+    image: ${OG_IMAGE:-taxi-og-generator}
+    depends_on:
+      - taxi-back
+    links:
+      - taxi-back:taxi-back
+    environment:
+      - API_ROOM_INFO=https://taxi-back/rooms/publicInfo?id={}
 
   taxi-mongo:
     container_name: taxi-mongo-dev
