@@ -100,7 +100,7 @@ services:
       - AWS_REGION=ap-northeast-2
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?err}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?err}
-    command: --debug --interval 60 --cleanup --enable-lifecycle-hooks taxi-front-dev taxi-back-dev
+    command: --debug --interval 60 --cleanup --enable-lifecycle-hooks taxi-front-dev taxi-back-dev taxi-og-generator-dev
     # --interval 60 : 이미지 업데이트를 60초 마다 하도록 지정
     # --cleanup : 업데이트 후 오래된 이미지 제거
     # --enable-lifecycle-hooks : 컨테이너 업데이트 시 스크립트 실행 활성화

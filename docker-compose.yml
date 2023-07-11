@@ -117,7 +117,7 @@ services:
       - AWS_REGION=ap-northeast-2
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?err}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?err}
-    command: --schedule "0 0 4 * * *" --cleanup --enable-lifecycle-hooks taxi-front taxi-back
+    command: --schedule "0 0 4 * * *" --cleanup --enable-lifecycle-hooks taxi-front taxi-back taxi-og-generator
     # --schedule "0 0 4 * * *" : 새로운 이미지를 확인하는 6-field cron 표현식 지정
     # --cleanup : 업데이트 후 오래된 이미지 제거
     # --enable-lifecycle-hooks : 컨테이너 업데이트 시 스크립트 실행 활성화
