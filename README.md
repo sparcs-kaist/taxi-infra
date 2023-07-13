@@ -1,5 +1,9 @@
 # taxi-docker
 
+## Production Service Docker-compose & CI/CD Outline Structure
+
+![service-structure](/images/service-structure.png)
+
 ## Setup
 
 ### Build Images (for dev service)
