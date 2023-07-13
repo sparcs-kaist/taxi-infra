@@ -22,6 +22,7 @@ services:
     environment:
       - REACT_APP_BACK_URL=${HOST_NAME:?err}/api
       - REACT_APP_IO_URL=${HOST_NAME:?err}
+      - REACT_APP_OG_URL=${HOST_NAME:?err}/og-image
       - REACT_APP_S3_URL=${S3_URL:?err}
       - REACT_APP_CHANNELTALK_PLUGIN_KEY=${CHANNELTALK_PLUGIN_KEY}
       - REACT_APP_KAKAO_SDK_KEY=${KAKAO_SDK_KEY}
