@@ -51,6 +51,7 @@ services:
       - 'com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트 후 taxi-back-dev 서비스를 재시작하였습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
     volumes:
       - taxi-back-dev-logs:/usr/src/app/logs:rw
+    command: cross-env TZ='Asia/Seoul' NODE_ENV=development node app.js
 
   taxi-og-generator:
     container_name: taxi-og-generator-dev
