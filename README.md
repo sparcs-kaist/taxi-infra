@@ -66,6 +66,7 @@ SESSION_KEY=
 JWT_SECRET_KEY=
 AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
+AWS_S3_DUMP_BUCKET_NAME=
 
 # Environment variables with default values
 FRONT_IMAGE=666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-front:latest
@@ -89,30 +90,6 @@ SPARCSSSO_CLIENT_KEY=
 GOOGLE_APPLICATION_CREDENTIALS=
 SLACK_REPORT_WEBHOOK_URL=
 SLACK_WATCHTOWER_WEBHOOK=
-
-
-FRONT_IMAGE=666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-front:latest
-BACK_IMAGE=666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-back:latest
-OG_IMAGE=666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-og-generator:latest
-HOST_NAME=https://taxi.sparcs.org
-PORT=80
-S3_URL=https://sparcs-taxi-prod.s3.ap-northeast-2.amazonaws.com
-SESSION_KEY=
-JWT_SECRET_KEY=
-APP_URI_SCHEME=org.sparcs.taxiApp
-SPARCSSSO_CLIENT_ID=
-SPARCSSSO_CLIENT_KEY=
-AWS_ACCESS_KEY_ID=
-AWS_SECRET_ACCESS_KEY=
-AWS_S3_BUCKET_NAME=sparcs-taxi-prod
-AWS_S3_DUMP_BUCKET_NAME=
-CHANNELTALK_PLUGIN_KEY=
-KAKAO_SDK_KEY=
-GA_TRACKING_ID=
-GOOGLE_APPLICATION_CREDENTIALS=
-FIREBASE_CONFIG=
-SLACK_WATCHTOWER_WEBHOOK=
-TEST_ACCOUNTS=["suwon@sparcs.org","otl-android-test@sparcs.org"]
 ```
 
 ### Create named volumes to store persistent MongoDB data & logs, backend logs
