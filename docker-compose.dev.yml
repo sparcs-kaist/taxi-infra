@@ -56,6 +56,8 @@ services:
     container_name: taxi-og-generator-dev
     restart: always
     image: ${OG_IMAGE:-666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-og-generator:dev}
+    ports:
+      - "${OG_PORT:?err}:80"
     depends_on:
       - taxi-back
     links:

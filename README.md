@@ -25,6 +25,7 @@ Environments for dev service
 # Required Environment variables
 FRONT_PORT=
 BACK_PORT=
+OG_PORT=
 SESSION_KEY=
 JWT_SECRET_KEY=
 AWS_ACCESS_KEY_ID=
@@ -60,6 +61,7 @@ Environments for prod service
 # Required Environment variables
 FRONT_PORT=
 BACK_PORT=
+OG_PORT=
 SESSION_KEY=
 JWT_SECRET_KEY=
 AWS_ACCESS_KEY_ID=
