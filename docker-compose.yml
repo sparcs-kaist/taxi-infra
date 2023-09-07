@@ -1,29 +1,18 @@
 version: "3"
 
 services:
-  taxi-proxy:
-    container_name: taxi-proxy
-    restart: always
-    build: taxi-proxy
-    ports:
-      - "${PORT:?err}:80"
-    depends_on:
-      - taxi-front
-      - taxi-back
-    links:
-      - taxi-front:taxi-front
-      - taxi-back:taxi-back
-      - taxi-og-generator:taxi-og-generator
-
   taxi-front:
     container_name: taxi-front
     restart: always
-    image: ${FRONT_IMAGE:-taxi-front}
+    image: ${FRONT_IMAGE:-666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-front:latest}
+    ports:
+      - "${FRONT_PORT:?err}:80"
     environment:
-      - REACT_APP_BACK_URL=${HOST_NAME:?err}/api
-      - REACT_APP_IO_URL=${HOST_NAME:?err}
-      - REACT_APP_OG_URL=${HOST_NAME:?err}/og-image
-      - REACT_APP_S3_URL=${S3_URL:?err}
+      - REACT_APP_FRONT_URL=${FRONT_URL:-https://taxi.sparcs.org}
+      - REACT_APP_BACK_URL=${BACK_URL:-https://api.taxi.sparcs.org}
+      - REACT_APP_IO_URL=${IO_URL:-https://api.taxi.sparcs.org}
+      - REACT_APP_OG_URL=${OG_URL:-https://og-image.taxi.sparcs.org}
+      - REACT_APP_S3_URL=${S3_URL:-https://sparcs-taxi-prod.s3.ap-northeast-2.amazonaws.com}
       - REACT_APP_CHANNELTALK_PLUGIN_KEY=${CHANNELTALK_PLUGIN_KEY}
       - REACT_APP_KAKAO_SDK_KEY=${KAKAO_SDK_KEY}
       - REACT_APP_GA_TRACKING_ID=${GA_TRACKING_ID}
@@ -35,7 +24,9 @@ services:
   taxi-back:
     container_name: taxi-back
     restart: always
-    image: ${BACK_IMAGE:-taxi-back}
+    image: ${BACK_IMAGE:-666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-back:latest}
+    ports:
+      - "${BACK_PORT:?err}:80"
     depends_on:
       - taxi-mongo
       - taxi-redis
@@ -46,16 +37,15 @@ services:
       - SESSION_KEY=${SESSION_KEY:?err}
       - SPARCSSSO_CLIENT_ID=${SPARCSSSO_CLIENT_ID}
       - SPARCSSSO_CLIENT_KEY=${SPARCSSSO_CLIENT_KEY}
-      - FRONT_URL=${HOST_NAME:?err}
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?err}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?err}
       - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME:-sparcs-taxi-prod}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:?err}
+      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+      - TEST_ACCOUNTS=${TEST_ACCOUNTS:-["suwon@sparcs.org","otl-android-test@sparcs.org"]}
+      - SLACK_REPORT_WEBHOOK_URL=${SLACK_REPORT_WEBHOOK_URL}
       - DB_PATH=mongodb://taxi-mongo:27017/taxi
       - REDIS_PATH=redis://taxi-redis:6379
-      - JWT_SECRET_KEY=${JWT_SECRET_KEY:?err}
-      - APP_URI_SCHEME=${APP_URI_SCHEME:?err}
-      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
-      - TEST_ACCOUNTS=${TEST_ACCOUNTS}
     labels:
       - 'com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"[PROD] 업데이트를 위해 taxi-back 서비스를 종료시켰습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
       - 'com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"[PROD] 업데이트 후 taxi-back 서비스를 재시작하였습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
@@ -65,13 +55,16 @@ services:
   taxi-og-generator:
     container_name: taxi-og-generator
     restart: always
-    image: ${OG_IMAGE:-taxi-og-generator}
+    image: ${OG_IMAGE:-666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-og-generator:latest}
+    ports:
+      - "${OG_PORT:?err}:80"
     depends_on:
       - taxi-back
     links:
       - taxi-back:taxi-back
     environment:
       - API_ROOM_INFO=http://taxi-back/rooms/publicInfo?id={}
+      - FRONT_URL=${FRONT_URL:-https://taxi.sparcs.org}
 
   taxi-mongo:
     container_name: taxi-mongo
