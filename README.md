@@ -23,8 +23,7 @@ Environments for dev service
 
 ```
 # Required Environment variables
-FRONT_PORT=
-BACK_PORT=
+PROXY_PORT=
 OG_PORT=
 SESSION_KEY=
 JWT_SECRET_KEY=
@@ -59,8 +58,7 @@ Environments for prod service
 
 ```
 # Required Environment variables
-FRONT_PORT=
-BACK_PORT=
+PROXY_PORT=
 OG_PORT=
 SESSION_KEY=
 JWT_SECRET_KEY=

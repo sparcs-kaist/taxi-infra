@@ -5,12 +5,12 @@ services:
     container_name: taxi-front-dev
     restart: always
     image: ${FRONT_IMAGE:-666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-front:dev}
-    ports:
-      - "${FRONT_PORT:?err}:80"
+    networks:
+      - proxy
     environment:
       - REACT_APP_FRONT_URL=${FRONT_URL:-https://taxi.dev.sparcs.org}
-      - REACT_APP_BACK_URL=${BACK_URL:-https://api.taxi.dev.sparcs.org}
-      - REACT_APP_IO_URL=${IO_URL:-https://api.taxi.dev.sparcs.org}
+      - REACT_APP_BACK_URL=${BACK_URL:-https://taxi.dev.sparcs.org/api}
+      - REACT_APP_IO_URL=${IO_URL:-https://taxi.dev.sparcs.org/api}
       - REACT_APP_OG_URL=${OG_URL:-https://og-image.taxi.dev.sparcs.org}
       - REACT_APP_S3_URL=${S3_URL:-https://sparcs-taxi-dev.s3.ap-northeast-2.amazonaws.com}
       - REACT_APP_CHANNELTALK_PLUGIN_KEY=${CHANNELTALK_PLUGIN_KEY}
@@ -25,14 +25,12 @@ services:
     container_name: taxi-back-dev
     restart: always
     image: ${BACK_IMAGE:-666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-back:dev}
-    ports:
-      - "${BACK_PORT:?err}:80"
     depends_on:
       - taxi-mongo
       - taxi-redis
-    links:
-      - taxi-mongo:taxi-mongo
-      - taxi-redis:taxi-redis
+    networks:
+      - proxy
+      - backend
     environment:
       - SESSION_KEY=${SESSION_KEY:?err}
       - SPARCSSSO_CLIENT_ID=${SPARCSSSO_CLIENT_ID}
@@ -61,16 +59,32 @@ services:
       - "${OG_PORT:?err}:80"
     depends_on:
       - taxi-back
-    links:
-      - taxi-back:taxi-back
+    networks:
+      - backend
     environment:
       - API_ROOM_INFO=http://taxi-back/rooms/publicInfo?id={}
       - FRONT_URL=${FRONT_URL:-https://taxi.dev.sparcs.org}
+
+  taxi-proxy:
+    container_name: taxi-proxy-dev
+    restart: always
+    image: nginx:1.24.0
+    ports:
+      - "${PROXY_PORT:?err}:80"
+    networks:
+      - proxy
+    depends_on:
+      - taxi-front
+      - taxi-back
+    volumes:
+      - ./taxi-proxy/conf.d:/etc/nginx/conf.d:ro
 
   taxi-mongo:
     container_name: taxi-mongo-dev
     restart: always
     image: mongo:4.4
+    networks:
+      - backend
     volumes:
       - ./taxi-mongo/mongodb.conf:/etc/mongodb.conf
       - taxi-mongo-dev-data:/data/db:rw
@@ -79,6 +93,8 @@ services:
     container_name: taxi-redis-dev
     restart: always
     image: redis:7.0.4-alpine
+    networks:
+      - backend
 
   taxi-watchtower:
     container_name: taxi-watchtower-dev
@@ -108,3 +124,7 @@ volumes:
     external: true
   taxi-ecr-helper-executable:
     external: true
+
+networks:
+  proxy:
+  backend:
