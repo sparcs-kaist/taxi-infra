@@ -144,3 +144,7 @@ volumes:
     external: true
   taxi-ecr-helper-executable:
     external: true
+
+networks:
+  proxy:
+  backend:
