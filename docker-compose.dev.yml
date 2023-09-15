@@ -64,6 +64,9 @@ services:
     environment:
       - API_ROOM_INFO=http://taxi-back/rooms/publicInfo?id={}
       - FRONT_URL=${FRONT_URL:-https://taxi.dev.sparcs.org}
+    labels:
+      - 'com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트를 위해 taxi-og-generator-dev 서비스를 종료시켰습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
+      - 'com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트 후 taxi-og-generator-dev 서비스를 재시작하였습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
 
   taxi-proxy:
     container_name: taxi-proxy-dev
