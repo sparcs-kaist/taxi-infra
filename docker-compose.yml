@@ -25,8 +25,6 @@ services:
     container_name: taxi-back
     restart: always
     image: ${BACK_IMAGE:-666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-back:latest}
-    ports:
-      - "${BACK_PORT:?err}:80"
     depends_on:
       - taxi-mongo
       - taxi-redis
