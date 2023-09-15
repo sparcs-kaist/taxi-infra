@@ -10,7 +10,7 @@ services:
     environment:
       - REACT_APP_FRONT_URL=${FRONT_URL:-https://taxi.dev.sparcs.org}
       - REACT_APP_BACK_URL=${BACK_URL:-https://taxi.dev.sparcs.org/api}
-      - REACT_APP_IO_URL=${IO_URL:-https://taxi.dev.sparcs.org/api}
+      - REACT_APP_IO_URL=${IO_URL:-https://taxi.dev.sparcs.org}
       - REACT_APP_OG_URL=${OG_URL:-https://og-image.taxi.dev.sparcs.org}
       - REACT_APP_S3_URL=${S3_URL:-https://sparcs-taxi-dev.s3.ap-northeast-2.amazonaws.com}
       - REACT_APP_CHANNELTALK_PLUGIN_KEY=${CHANNELTALK_PLUGIN_KEY}
