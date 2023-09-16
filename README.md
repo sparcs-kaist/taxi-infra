@@ -97,6 +97,8 @@ $ docker volume create taxi-mongo-logs
 taxi-mongo-logs
 $ docker volume create taxi-mongo-data
 taxi-mongo-data
+$ docker volume create taxi-redis-data
+taxi-redis-data
 $ docker volume create taxi-back-logs
 taxi-back-logs
 $ docker volume create taxi-scheduler-logs
@@ -106,5 +108,13 @@ taxi-scheduler-logs
 ### Compose up
 
 ```bash
-docker-compose up -d
+make prod-up # for prod service
+make dev-up # for dev service
+```
+
+### Compose down
+
+```bash
+make prod-down # for prod service
+make dev-down # for dev service
 ```
