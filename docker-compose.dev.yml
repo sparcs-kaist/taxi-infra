@@ -99,6 +99,21 @@ services:
     networks:
       - backend
 
+  taxi-worker:
+    container_name: taxi-worker-dev
+    restart: always
+    image: ${BACK_IMAGE:-666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-back:dev}
+    depends_on:
+      - taxi-redis
+    networks:
+      - backend
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+      - REDIS_PATH=redis://taxi-redis:6379
+    labels:
+      - 'com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트를 위해 taxi-worker-dev 서비스를 종료시켰습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
+      - 'com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트 후 taxi-worker-dev 서비스를 재시작하였습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
+
   taxi-watchtower:
     container_name: taxi-watchtower-dev
     image: containrrr/watchtower:latest
@@ -114,7 +129,7 @@ services:
       - AWS_REGION=ap-northeast-2
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?err}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?err}
-    command: --debug --interval 60 --cleanup --enable-lifecycle-hooks taxi-front-dev taxi-back-dev taxi-og-generator-dev
+    command: --debug --interval 60 --cleanup --enable-lifecycle-hooks taxi-front-dev taxi-back-dev taxi-og-generator-dev taxi-worker-dev
     # --interval 60 : 이미지 업데이트를 60초 마다 하도록 지정
     # --cleanup : 업데이트 후 오래된 이미지 제거
     # --enable-lifecycle-hooks : 컨테이너 업데이트 시 스크립트 실행 활성화
