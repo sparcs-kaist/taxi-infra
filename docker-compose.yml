@@ -5,12 +5,12 @@ services:
     container_name: taxi-front
     restart: always
     image: ${FRONT_IMAGE:-666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-front:latest}
-    ports:
-      - "${FRONT_PORT:?err}:80"
+    networks:
+      - proxy
     environment:
       - REACT_APP_FRONT_URL=${FRONT_URL:-https://taxi.sparcs.org}
-      - REACT_APP_BACK_URL=${BACK_URL:-https://api.taxi.sparcs.org}
-      - REACT_APP_IO_URL=${IO_URL:-https://api.taxi.sparcs.org}
+      - REACT_APP_BACK_URL=${BACK_URL:-https://taxi.sparcs.org/api}
+      - REACT_APP_IO_URL=${IO_URL:-https://taxi.sparcs.org}
       - REACT_APP_OG_URL=${OG_URL:-https://og-image.taxi.sparcs.org}
       - REACT_APP_S3_URL=${S3_URL:-https://sparcs-taxi-prod.s3.ap-northeast-2.amazonaws.com}
       - REACT_APP_CHANNELTALK_PLUGIN_KEY=${CHANNELTALK_PLUGIN_KEY}
@@ -25,14 +25,12 @@ services:
     container_name: taxi-back
     restart: always
     image: ${BACK_IMAGE:-666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-back:latest}
-    ports:
-      - "${BACK_PORT:?err}:80"
     depends_on:
       - taxi-mongo
       - taxi-redis
-    links:
-      - taxi-mongo:taxi-mongo
-      - taxi-redis:taxi-redis
+    networks:
+      - proxy
+      - backend
     environment:
       - SESSION_KEY=${SESSION_KEY:?err}
       - SPARCSSSO_CLIENT_ID=${SPARCSSSO_CLIENT_ID}
@@ -60,16 +58,35 @@ services:
       - "${OG_PORT:?err}:80"
     depends_on:
       - taxi-back
-    links:
-      - taxi-back:taxi-back
+    networks:
+      - backend
     environment:
       - API_ROOM_INFO=http://taxi-back/rooms/publicInfo?id={}
       - FRONT_URL=${FRONT_URL:-https://taxi.sparcs.org}
+    labels:
+      - 'com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"[PROD] 업데이트를 위해 taxi-og-generator 서비스를 종료시켰습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
+      - 'com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"[PROD] 업데이트 후 taxi-og-generator 서비스를 재시작하였습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
+
+  taxi-proxy:
+    container_name: taxi-proxy
+    restart: always
+    image: nginx:1.24.0
+    ports:
+      - "${PROXY_PORT:?err}:80"
+    networks:
+      - proxy
+    depends_on:
+      - taxi-front
+      - taxi-back
+    volumes:
+      - ./taxi-proxy/conf.d:/etc/nginx/conf.d:ro
 
   taxi-mongo:
     container_name: taxi-mongo
     restart: always
     image: mongo:4.4
+    networks:
+      - backend
     volumes:
       - ./taxi-mongo/mongodb.conf:/etc/mongodb.conf
       - taxi-mongo-logs:/var/log/mongodb/mongod.log:rw
@@ -79,13 +96,15 @@ services:
     container_name: taxi-redis
     restart: always
     image: redis:7.0.4-alpine
-
+    networks:
+      - backend
+  
   taxi-scheduler:
     container_name: taxi-scheduler
     restart: always
     build: taxi-scheduler
-    links:
-      - taxi-mongo:mongodb
+    networks:
+      - backend
     environment:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?err}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?err}
@@ -111,7 +130,7 @@ services:
       - AWS_REGION=ap-northeast-2
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?err}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?err}
-    command: --schedule "0 0 4 * * *" --cleanup --enable-lifecycle-hooks taxi-front taxi-back taxi-og-generator
+    command:  --interval 60 --cleanup --enable-lifecycle-hooks taxi-front taxi-back taxi-og-generator
     # --schedule "0 0 4 * * *" : 새로운 이미지를 확인하는 6-field cron 표현식 지정
     # --cleanup : 업데이트 후 오래된 이미지 제거
     # --enable-lifecycle-hooks : 컨테이너 업데이트 시 스크립트 실행 활성화
@@ -128,3 +147,7 @@ volumes:
     external: true
   taxi-ecr-helper-executable:
     external: true
+
+networks:
+  proxy:
+  backend:
