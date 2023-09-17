@@ -104,6 +104,7 @@ services:
     restart: always
     image: ${BACK_IMAGE:-666583083672.dkr.ecr.ap-northeast-2.amazonaws.com/taxi-back:dev}
     depends_on:
+      - taxi-back
       - taxi-redis
     networks:
       - backend
@@ -113,6 +114,7 @@ services:
     labels:
       - 'com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트를 위해 taxi-worker-dev 서비스를 종료시켰습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
       - 'com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트 후 taxi-worker-dev 서비스를 재시작하였습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
+    command: npm run worker:prod
 
   taxi-watchtower:
     container_name: taxi-watchtower-dev
