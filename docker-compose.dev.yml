@@ -98,6 +98,8 @@ services:
     image: redis:7.0.4-alpine
     networks:
       - backend
+    volumes:
+      - taxi-redis-dev-data:/data:rw
 
   taxi-watchtower:
     container_name: taxi-watchtower-dev
@@ -124,6 +126,8 @@ volumes:
   taxi-back-dev-logs:
     external: true
   taxi-mongo-dev-data:
+    external: true
+  taxi-redis-dev-data:
     external: true
   taxi-ecr-helper-executable:
     external: true

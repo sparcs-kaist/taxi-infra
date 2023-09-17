@@ -98,7 +98,9 @@ services:
     image: redis:7.0.4-alpine
     networks:
       - backend
-  
+    volumes:
+      - taxi-redis-data:/data:rw
+
   taxi-scheduler:
     container_name: taxi-scheduler
     restart: always
@@ -130,7 +132,7 @@ services:
       - AWS_REGION=ap-northeast-2
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?err}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?err}
-    command:  --interval 60 --cleanup --enable-lifecycle-hooks taxi-front taxi-back taxi-og-generator
+    command: --interval 60 --cleanup --enable-lifecycle-hooks taxi-front taxi-back taxi-og-generator
     # --schedule "0 0 4 * * *" : 새로운 이미지를 확인하는 6-field cron 표현식 지정
     # --cleanup : 업데이트 후 오래된 이미지 제거
     # --enable-lifecycle-hooks : 컨테이너 업데이트 시 스크립트 실행 활성화
@@ -140,6 +142,8 @@ volumes:
   taxi-mongo-logs:
     external: true
   taxi-mongo-data:
+    external: true
+  taxi-redis-data:
     external: true
   taxi-back-logs:
     external: true
