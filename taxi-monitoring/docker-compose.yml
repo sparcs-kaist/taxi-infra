@@ -6,4 +6,4 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./logs:/logs:rw
       - ./monitor.sh:/monitor.sh
-    command: sh -c "while true; /monitor.sh; sleep 3; done"
+    command: sh -c "while true; do /monitor.sh; sleep 3; done"

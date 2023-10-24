@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Change the working directory
 cd /logs
