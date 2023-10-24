@@ -1,0 +1,9 @@
+version: "3.7"
+services:
+  worker:
+    image: "docker:24.0.6-cli"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./logs:/logs:rw
+      - ./monitor.sh:/monitor.sh
+    command: sh -c "while true; /monitor.sh; sleep 3; done"
