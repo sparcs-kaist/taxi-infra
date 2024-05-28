@@ -1,6 +1,7 @@
 FROM mongo:4.4
 
-RUN apt-get update && apt-get -y install cron && apt-get -y install awscli
+RUN rm /etc/apt/sources.list.d/mongodb-org.list
+RUN apt-get update && apt-get -y install cron awscli && apt clean all
 
 # The cron job is scheduled at every 4 am
 # you can set cron time at docker-compose also.
