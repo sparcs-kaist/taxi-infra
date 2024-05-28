@@ -18,6 +18,7 @@ services:
       - REACT_APP_GA_TRACKING_ID=${GA_TRACKING_ID}
       - REACT_APP_FIREBASE_CONFIG=${FIREBASE_CONFIG}
     labels:
+      - "com.centurylinklabs.watchtower.scope=taxi-dev"
       - 'com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트를 위해 taxi-front-dev 서비스를 종료시켰습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
       - 'com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트 후 taxi-front-dev 서비스를 재시작하였습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
 
@@ -45,6 +46,7 @@ services:
       - DB_PATH=mongodb://taxi-mongo:27017/taxi
       - REDIS_PATH=redis://taxi-redis:6379
     labels:
+      - "com.centurylinklabs.watchtower.scope=taxi-dev"
       - 'com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트를 위해 taxi-back-dev 서비스를 종료시켰습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
       - 'com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트 후 taxi-back-dev 서비스를 재시작하였습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
     volumes:
@@ -65,6 +67,7 @@ services:
       - API_ROOM_INFO=http://taxi-back/rooms/publicInfo?id={}
       - FRONT_URL=${FRONT_URL:-https://taxi.dev.sparcs.org}
     labels:
+      - "com.centurylinklabs.watchtower.scope=taxi-dev"
       - 'com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트를 위해 taxi-og-generator-dev 서비스를 종료시켰습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
       - 'com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트 후 taxi-og-generator-dev 서비스를 재시작하였습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
 
@@ -116,7 +119,8 @@ services:
       - AWS_REGION=ap-northeast-2
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?err}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?err}
-    command: --debug --interval 60 --cleanup --enable-lifecycle-hooks taxi-front-dev taxi-back-dev taxi-og-generator-dev
+    command: --debug --interval 60 --cleanup --enable-lifecycle-hooks --scope taxi-dev
+    labels: ["com.centurylinklabs.watchtower.scope=taxi-dev"]
     # --interval 60 : 이미지 업데이트를 60초 마다 하도록 지정
     # --cleanup : 업데이트 후 오래된 이미지 제거
     # --enable-lifecycle-hooks : 컨테이너 업데이트 시 스크립트 실행 활성화
