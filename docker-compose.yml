@@ -45,6 +45,8 @@ services:
       - SLACK_REPORT_WEBHOOK_URL=${SLACK_REPORT_WEBHOOK_URL}
       - DB_PATH=mongodb://taxi-mongo:27017/taxi
       - REDIS_PATH=redis://taxi-redis:6379
+      - NAVER_MAP_API_ID=${NAVER_MAP_API_ID}
+      - NAVER_MAP_API_KEY=${NAVER_MAP_API_KEY}
     labels:
       - "com.centurylinklabs.watchtower.scope=taxi"
       - 'com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"[PROD] 업데이트를 위해 taxi-back 서비스를 종료시켰습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
