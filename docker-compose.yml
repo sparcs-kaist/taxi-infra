@@ -17,6 +17,7 @@ services:
       - REACT_APP_KAKAO_SDK_KEY=${KAKAO_SDK_KEY}
       - REACT_APP_GA_TRACKING_ID=${GA_TRACKING_ID}
       - REACT_APP_FIREBASE_CONFIG=${FIREBASE_CONFIG}
+      - REACT_APP_GTM_ID=${GTM_ID}
     labels:
       - "com.centurylinklabs.watchtower.scope=taxi"
       - 'com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"[PROD] 업데이트를 위해 taxi-front 서비스를 종료시켰습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
@@ -45,6 +46,8 @@ services:
       - SLACK_REPORT_WEBHOOK_URL=${SLACK_REPORT_WEBHOOK_URL}
       - DB_PATH=mongodb://taxi-mongo:27017/taxi
       - REDIS_PATH=redis://taxi-redis:6379
+      - FRONT_URL=${FRONT_URL:-https://taxi.sparcs.org}
+      - ONEAPP_TOKEN_SECRET=${ONEAPP_TOKEN_SECRET}
     labels:
       - "com.centurylinklabs.watchtower.scope=taxi"
       - 'com.centurylinklabs.watchtower.lifecycle.pre-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"[PROD] 업데이트를 위해 taxi-back 서비스를 종료시켰습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
