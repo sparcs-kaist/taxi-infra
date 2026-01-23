@@ -76,7 +76,7 @@ FRONT_URL=https://taxi.sparcs.org
 BACK_URL=https://api.taxi.sparcs.org
 IO_URL=https://api.taxi.sparcs.org
 OG_URL=https://og-image.taxi.sparcs.org
-S3_URL=https://sparcs-taxi-prod.s3.ap-northeast-2.amazonaws.com
+S3_URL=https://taxi.cdn.sparcs.org
 AWS_S3_BUCKET_NAME=sparcs-taxi-prod
 TEST_ACCOUNTS=["suwon@sparcs.org","otl-android-test@sparcs.org"]
 
