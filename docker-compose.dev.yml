@@ -40,6 +40,7 @@ services:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?err}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?err}
       - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME:-sparcs-taxi-dev}
+      - AWS_S3_URL=${S3_URL:-https://sparcs-taxi-dev.s3.ap-northeast-2.amazonaws.com}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY:?err}
       - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
       - TEST_ACCOUNTS=${TEST_ACCOUNTS}
@@ -54,7 +55,7 @@ services:
       - 'com.centurylinklabs.watchtower.lifecycle.post-update=curl -X POST -H ''Content-type: application/json'' --data ''{"text":"업데이트 후 taxi-back-dev 서비스를 재시작하였습니다."}'' ${SLACK_WATCHTOWER_WEBHOOK}'
     volumes:
       - taxi-back-dev-logs:/usr/src/app/logs:rw
-    command: npx cross-env TZ='Asia/Seoul' NODE_ENV=development node dist/index.js
+    command: npx cross-env TZ='Asia/Seoul' NODE_ENV=development node dist/src/index.js
 
   taxi-og-generator:
     container_name: taxi-og-generator-dev
