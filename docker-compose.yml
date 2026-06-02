@@ -68,6 +68,7 @@ services:
       - backend
     environment:
       - API_ROOM_INFO=http://taxi-back/rooms/publicInfo?id={}
+      - API_INVITER_INFO=http://taxi-back/events/2026spring/invites/search/{}
       - FRONT_URL=${FRONT_URL:-https://taxi.sparcs.org}
     labels:
       - "com.centurylinklabs.watchtower.scope=taxi"
