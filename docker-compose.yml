@@ -126,7 +126,7 @@ services:
 
   taxi-watchtower:
     container_name: taxi-watchtower
-    image: containrrr/watchtower:latest
+    image: nickfedor/watchtower:latest
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
